@@ -1,0 +1,16 @@
+# Script bash simples de monitoramento de utilização da CPU e outro para monitorar a memória. Faça uso das ferramentas vmstat e free para coletar as informações de utilização da CPU e de memória. O script deverá ser capaz de coletar e armazenar em um arquivo de log informações como, % de uso do usuário, % de uso do sistema, % ociosa da CPU e memória usada, memória livre, memória buffer, memória cache e memória swap. Gerar gráficos mostrando o consumo desses recursos. 
+#!/bin/bash
+
+tempo=0;
+echo "Usada; Livre; Buffer; Cache; Swap;" > log-monitoramento-vmstat.csv
+while [ $tempo -lt 1200 ]
+do	
+    usada=$(free | awk '/Mem./{print $3}')
+    livre=$(vmstat | awk '/0/{print $4}')
+    buffer=$(vmstat | awk '/0/{print $5}')
+    cache=$(vmstat | awk '/0/{print $6}')
+    swap=$(vmstat | awk '/0/{print $3}')
+	
+	echo "$usada;$livre;$buffer;$cache;$swap;" >> log-monitoramento-vmstat.csv
+	tempo=$((tempo+10))
+done
