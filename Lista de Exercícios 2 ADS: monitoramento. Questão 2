@@ -2,13 +2,13 @@
 #!/bin/bash
 
 tempo=0;
-echo "Usuario;Sistema; Ociosa; Usada; Livre; Buffer; Cache; Swap;" > log-monitoramento-vmstat.csv
-while [ $tempo -lt 1200 ]
-do	
+echo "Usuario; Sistema; Ociosa; Usada; Livre; Buffer; Cache; Swap;" > log-monitoramento-vmstat.csv
+while [ $tempo -lt 1200000 ]
+    do	
     
-    usuario=$(cat /proc/stat | awk ' /cpu /{print $2}')
-    sistema=$(cat /proc/stat | awk ' /cpu /{print $4}')
-    ociosa=$(cat /proc/stat | awk ' /cpu /{print $5}')
+    usuario=$(cat /proc/stat | awk '/cpu /{print $2}')
+    sistema=$(cat /proc/stat | awk '/cpu /{print $4}')
+    ociosa=$(cat /proc/stat | awk '/cpu /{print $5}')
     usada=$(free | awk '/Mem./{print $3}')
     livre=$(vmstat | awk '/0/{print $4}')
     buffer=$(vmstat | awk '/0/{print $5}')
@@ -16,5 +16,5 @@ do
     swap=$(vmstat | awk '/0/{print $3}')
 	
 	echo "$usuario;$sistema;$ociosa;$usada;$livre;$buffer;$cache;$swap;" >> log-monitoramento-vmstat.csv
-	tempo=$((tempo+10))
+	tempo=$((tempo +10))
 done
