@@ -1,7 +1,6 @@
 #!/bin/bash
 
-APPNAME=$1
-PID=$(pidof ${APPNAME} | awk 'NF>1{print $NF}')
+PID=$1
 PROCPATH="/proc/${PID}"
 SAMPLES=$2
 SAMPLE_TIME=$3

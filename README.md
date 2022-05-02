@@ -6,12 +6,12 @@ Resolução de questões sobre monitoramento de sistemas
 
 ### Q1
 
-O script `q1.sh` recebe 3 parâmetros: `nome da aplicação`, `número de amostras` e `tempo entre amostras (em milisegundos)`.
+O script `q1.sh` recebe 3 parâmetros: `pid da aplicação`, `número de amostras` e `tempo entre amostras (em milisegundos)`.
 
 No exemplo abaixo, serão feitas 500 coletas da aplicação `firefox` com intervalo entre elas de 1000ms:
 
 ```bash
-bash q1.sh firefox 500 1000 | tee firefox.csv
+bash q1.sh $(pidof firefox | awk 'NF>1{print $NF}') 500 1000 | tee firefox.csv
 ```
 
 Abaixo está um exemplo do CSV gerado:
