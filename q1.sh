@@ -13,7 +13,8 @@ fi
 
 clock_ticks=$(getconf CLK_TCK)
 
-echo "uptime, num_threads, memory_usage, cpu_time"
+printf "uptime,num_threads,memory_usage,cpu_time"
+printf "\n0,1,0,0"
 
 for i in $(seq 1 $SAMPLES); do
     start=$(date +%s%3N)
@@ -41,6 +42,6 @@ for i in $(seq 1 $SAMPLES); do
     data_and_stack=${statm_array[5]}
     memory_usage=$(( $resident + $data_and_stack ))
 
-    printf "\n%f, %u, %d, %f" ${seconds} ${num_threads} ${memory_usage} ${cpu_time}
+    printf "\n%f,%u,%d,%f" ${seconds} ${num_threads} ${memory_usage} ${cpu_time}
     sleep $(awk 'BEGIN {print ( ('$SAMPLE_TIME' - ('$(date +%s%3N)' - '$start') ) / 1000 )}')
 done
