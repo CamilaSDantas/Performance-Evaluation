@@ -1,0 +1,35 @@
+#Script bash simples de monitoramento de utilização da CPU e outro para monitorar a memória, com uso das ferramentas vmstat e free para coletar as informações de utilização da CPU e de memória. O script deverá ser capaz de coletar e armazenar em um arquivo de log informações como, % de uso do usuário, % de uso do sistema, % ociosa da CPU e memória usada, memória livre, memória buffer, memória cache e memória swap. Gerar gráficos mostrando o consumo desses recursos. 
+#Monitoramento de memória - scripts: 
+#!/bin/bash 
+# Total: A quantidade total de RAM física neste computador. 
+# Usada: A soma de Free + Buffers + Cache subtraída do valor total. # Livre: A quantidade de memória não utilizada. 
+# Compartilhado: Quantidade de memória usada pelo tmpfs sistemas de arquivos. # Buff / cache: Quantidade de memória usada para buffers e cache. Isso pode ser liberado rapidamente pelo kernel, se necessário. 
+# Acessível: É uma estimativa da memória disponível para atender solicitações de memória de aplicativos e qualquer outro software operacional no seu computador. 
+
+#Opção de código 1: 
+echo "Informe o tempo de intervalo entre cada coleta em segundos:" read x 
+echo "Informe o número total de coletas:" 
+read y 
+echo "Coleta de Mémoria Iniciada..." 
+dstat --time --mem $x $y >> logmem.csv 
+echo "Coleta de Mémoria Finaliza!" 
+sleep 1 
+
+#opção de código 2: 
+tempo=0; 
+echo "Usuario; Sistema; Ociosa; Usada; Livre; Buffer; Cache; Swap;" > log-monitoramento-vmstat.csv 
+while [ $tempo -lt 120 ] 
+do 
+usuario=$(cat /proc/stat | awk '/cpu /{print $2}') 
+sistema=$(cat /proc/stat | awk '/cpu /{print $4}')
+ociosa=$(cat /proc/stat | awk '/cpu /{print $5}') 
+usada=$(free | awk '/Mem./{print $3}') 
+livre=$(vmstat | awk '/0/{print $4}') 
+buffer=$(vmstat | awk '/0/{print $5}') 
+cache=$(vmstat | awk '/0/{print $6}') 
+swap=$(vmstat | awk '/0/{print $3}') 
+echo "$usuario;$sistema;$ociosa;$usada;$livre;$buffer;$cache;$swap;" >> log-monitoramento-vmstat.csv 
+tempo=$((tempo +10)) 
+done 
+
+
